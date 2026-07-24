@@ -1,4 +1,4 @@
-/* ─── URL Blocker Popup ─── */
+/* ─── URL Blocker Popup · Claymorphism Dark ─── */
 *,
 *::before,
 *::after {
@@ -8,22 +8,49 @@
 }
 
 :root {
-  --bg-base: #0b0b0e;
-  --bg-surface: #131318;
-  --bg-elevated: #1b1b22;
-  --bg-hover: #222230;
-  --border: rgba(255, 255, 255, 0.06);
-  --border-focus: rgba(99, 102, 241, 0.5);
-  --text-primary: #e4e4ec;
-  --text-secondary: #6e6e7a;
-  --text-tertiary: #48484f;
-  --accent: #6366f1;
-  --accent-hover: #818cf8;
-  --accent-glow: rgba(99, 102, 241, 0.12);
-  --danger: #ef4444;
-  --danger-hover: #f87171;
-  --success: #34d399;
-  --radius: 10px;
+  /* ── Palette ── */
+  --bg-base: #111113;
+  --bg-clay: #1e1e22;
+  --bg-clay-hover: #252529;
+  --border: rgba(255, 255, 255, 0.04);
+  --text-primary: #e8e8ec;
+  --text-secondary: #7a7a84;
+  --text-muted: #4a4a52;
+  --accent: #e8e8ec;
+  --accent-hover: #ffffff;
+  --danger: #e05555;
+  --danger-hover: #f07070;
+  --success: #4ade80;
+
+  /* ── Clay Shadows ── */
+  --clay-shadow:
+    8px 8px 16px rgba(0, 0, 0, 0.45),
+    inset -4px -4px 8px rgba(0, 0, 0, 0.3),
+    inset 4px 4px 8px rgba(255, 255, 255, 0.04);
+
+  --clay-shadow-hover:
+    4px 4px 10px rgba(0, 0, 0, 0.5),
+    inset -3px -3px 6px rgba(0, 0, 0, 0.35),
+    inset 3px 3px 6px rgba(255, 255, 255, 0.06);
+
+  --clay-shadow-pressed:
+    2px 2px 6px rgba(0, 0, 0, 0.5),
+    inset -2px -2px 4px rgba(0, 0, 0, 0.4),
+    inset 2px 2px 4px rgba(255, 255, 255, 0.03);
+
+  --clay-shadow-sm:
+    4px 4px 10px rgba(0, 0, 0, 0.35),
+    inset -2px -2px 5px rgba(0, 0, 0, 0.25),
+    inset 2px 2px 5px rgba(255, 255, 255, 0.035);
+
+  --clay-shadow-sm-hover:
+    2px 2px 6px rgba(0, 0, 0, 0.4),
+    inset -2px -2px 4px rgba(0, 0, 0, 0.3),
+    inset 2px 2px 4px rgba(255, 255, 255, 0.05);
+
+  /* ── Geometry ── */
+  --radius: 16px;
+  --radius-lg: 24px;
 }
 
 body {
@@ -40,7 +67,7 @@ body {
   display: flex;
   flex-direction: column;
   padding: 20px;
-  gap: 14px;
+  gap: 16px;
 }
 
 /* ─── Header ─── */
@@ -56,21 +83,23 @@ body {
 }
 
 .logo-icon {
-  width: 36px;
-  height: 36px;
-  background: linear-gradient(135deg, var(--accent-glow), rgba(99, 102, 241, 0.04));
-  border: 1px solid rgba(99, 102, 241, 0.18);
+  width: 40px;
+  height: 40px;
+  background: var(--bg-clay);
+  border: 1px solid var(--border);
   border-radius: var(--radius);
+  box-shadow: var(--clay-shadow-sm);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--accent);
+  color: var(--text-primary);
 }
 
 h1 {
   font-size: 15px;
   font-weight: 700;
   letter-spacing: -0.02em;
+  color: var(--text-primary);
 }
 
 .subtitle {
@@ -88,52 +117,56 @@ h1 {
 
 #urlInput {
   flex: 1;
-  background: var(--bg-surface);
+  background: var(--bg-clay);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 11px 14px;
+  padding: 12px 16px;
   color: var(--text-primary);
   font-size: 13px;
   font-family: inherit;
   outline: none;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: var(--clay-shadow);
+  transition: box-shadow 0.25s ease, background 0.2s ease;
 }
 
 #urlInput::placeholder {
-  color: var(--text-tertiary);
+  color: var(--text-muted);
 }
 
 #urlInput:focus {
-  border-color: var(--border-focus);
-  box-shadow: 0 0 0 3px var(--accent-glow);
+  box-shadow: var(--clay-shadow-hover);
+  background: var(--bg-clay-hover);
 }
 
 .btn-add {
-  width: 42px;
+  width: 44px;
   flex-shrink: 0;
   background: var(--accent);
-  border: none;
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: var(--radius);
-  color: #fff;
+  color: var(--bg-base);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.15s ease, transform 0.1s ease;
+  box-shadow: var(--clay-shadow);
+  transition: box-shadow 0.2s ease, transform 0.15s ease, background 0.15s ease;
 }
 
 .btn-add:hover {
   background: var(--accent-hover);
+  box-shadow: var(--clay-shadow-hover);
 }
 
 .btn-add:active {
-  transform: scale(0.94);
+  box-shadow: var(--clay-shadow-pressed);
+  transform: scale(0.95);
 }
 
 /* ─── Feedback ─── */
 .feedback {
-  padding: 8px 14px;
-  border-radius: 8px;
+  padding: 9px 14px;
+  border-radius: 12px;
   font-size: 12px;
   font-weight: 500;
   text-align: center;
@@ -146,15 +179,15 @@ h1 {
 }
 
 .feedback.success {
-  background: rgba(52, 211, 153, 0.08);
+  background: var(--bg-clay);
   color: var(--success);
-  border: 1px solid rgba(52, 211, 153, 0.15);
+  box-shadow: var(--clay-shadow-sm);
 }
 
 .feedback.error {
-  background: rgba(239, 68, 68, 0.08);
+  background: var(--bg-clay);
   color: var(--danger);
-  border: 1px solid rgba(239, 68, 68, 0.15);
+  box-shadow: var(--clay-shadow-sm);
 }
 
 .feedback.hidden {
@@ -180,9 +213,10 @@ h1 {
 .count {
   font-size: 11px;
   font-weight: 700;
-  color: var(--accent);
-  background: var(--accent-glow);
-  padding: 2px 9px;
+  color: var(--text-primary);
+  background: var(--bg-clay);
+  box-shadow: var(--clay-shadow-sm);
+  padding: 3px 10px;
   border-radius: 99px;
   min-width: 20px;
   text-align: center;
@@ -192,7 +226,7 @@ h1 {
 .url-list {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
   max-height: 290px;
   overflow-y: auto;
   padding-right: 2px;
@@ -200,17 +234,17 @@ h1 {
 
 /* Scrollbar */
 .url-list::-webkit-scrollbar {
-  width: 4px;
+  width: 5px;
 }
 .url-list::-webkit-scrollbar-track {
   background: transparent;
 }
 .url-list::-webkit-scrollbar-thumb {
-  background: var(--bg-elevated);
-  border-radius: 4px;
+  background: var(--bg-clay);
+  border-radius: 99px;
 }
 .url-list::-webkit-scrollbar-thumb:hover {
-  background: var(--bg-hover);
+  background: var(--bg-clay-hover);
 }
 
 /* ─── URL Item ─── */
@@ -219,18 +253,19 @@ h1 {
   align-items: center;
   justify-content: space-between;
   gap: 10px;
-  padding: 10px 12px;
-  background: var(--bg-surface);
+  padding: 12px 14px;
+  background: var(--bg-clay);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  transition: background 0.15s ease, border-color 0.15s ease;
+  box-shadow: var(--clay-shadow-sm);
+  transition: box-shadow 0.2s ease, background 0.2s ease;
   animation: slideIn 0.22s ease-out backwards;
 }
 
 /* Stagger animation for list items */
 .url-item:nth-child(1)  { animation-delay: 0s; }
 .url-item:nth-child(2)  { animation-delay: 0.03s; }
-.url-item:nth-child(3)  { animation-delay: 0.06s; }
+.url-item:nth-child(3)  { animation-delay: 0.03s; }
 .url-item:nth-child(4)  { animation-delay: 0.09s; }
 .url-item:nth-child(5)  { animation-delay: 0.12s; }
 .url-item:nth-child(6)  { animation-delay: 0.15s; }
@@ -251,8 +286,8 @@ h1 {
 }
 
 .url-item:hover {
-  background: var(--bg-elevated);
-  border-color: rgba(255, 255, 255, 0.08);
+  background: var(--bg-clay-hover);
+  box-shadow: var(--clay-shadow-sm-hover);
 }
 
 .url-info {
@@ -274,26 +309,29 @@ h1 {
 
 .url-date {
   font-size: 10px;
-  color: var(--text-tertiary);
+  color: var(--text-muted);
 }
 
 .btn-remove {
   background: none;
   border: none;
-  color: var(--text-tertiary);
+  color: var(--text-muted);
   cursor: pointer;
-  padding: 5px;
-  border-radius: 6px;
+  padding: 6px;
+  border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  transition: color 0.15s ease, background 0.15s ease;
+  transition: color 0.15s ease, background 0.15s ease, box-shadow 0.2s ease;
 }
 
 .btn-remove:hover {
   color: var(--danger);
-  background: rgba(239, 68, 68, 0.1);
+  background: rgba(224, 85, 85, 0.08);
+  box-shadow:
+    inset -2px -2px 4px rgba(0, 0, 0, 0.2),
+    inset 2px 2px 4px rgba(255, 255, 255, 0.02);
 }
 
 .btn-remove:active {
@@ -312,7 +350,7 @@ h1 {
 
 .empty-icon {
   margin-bottom: 8px;
-  color: var(--text-tertiary);
+  color: var(--text-muted);
 }
 
 .empty-state p {
@@ -322,7 +360,7 @@ h1 {
 }
 
 .empty-state .empty-sub {
-  color: var(--text-tertiary);
+  color: var(--text-muted);
   font-size: 11px;
   font-weight: 400;
 }
