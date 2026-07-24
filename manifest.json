@@ -7,7 +7,8 @@
     "declarativeNetRequest",
     "declarativeNetRequestWithHostAccess",
     "webNavigation",
-    "storage"
+    "storage",
+    "tabs"
   ],
   "host_permissions": [
     "<all_urls>"

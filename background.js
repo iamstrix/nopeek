@@ -1,7 +1,10 @@
 // ─── ex-it Service Worker ───
-// Manages declarativeNetRequest dynamic rules for blocking URLs.
+// Manages declarativeNetRequest dynamic rules and per-tab navigation tracking.
 
-chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
+// In-memory tracker for the last safe (unblocked) URL per tab
+const lastSafeUrlMap = new Map();
+
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   switch (message.action) {
     case 'addUrl':
       addBlockedUrl(message.url).then(sendResponse);
@@ -12,7 +15,15 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
     case 'getUrls':
       getBlockedUrls().then(sendResponse);
       return true;
+    case 'goBack':
+      handleGoBack(sender.tab).then(sendResponse);
+      return true;
   }
+});
+
+// Clean up tracker when tabs close
+chrome.tabs.onRemoved.addListener((tabId) => {
+  lastSafeUrlMap.delete(tabId);
 });
 
 // Sync dynamic rules with stored blocked URLs whenever extension starts or updates
@@ -59,74 +70,105 @@ async function syncRules() {
   }
 }
 
-// BULLETPROOF FALLBACK: Manually intercept and redirect if DNR fails natively
-// Abstracted check logic so we can call it on both full navigations and SPA history updates.
-async function checkNavigation(details, isSpa = false) {
+/**
+ * Records safe URLs per tab so "Go Back" can reliably return to the last safe website
+ * without getting trapped in history loops.
+ */
+async function trackSafeUrl(tabId, url) {
+  if (!url || url.startsWith('chrome-extension://') || url.startsWith('chrome://') || url.startsWith('about:')) {
+    return;
+  }
+  const data = await chrome.storage.local.get({ blockedUrls: [] });
+  const isBlocked = data.blockedUrls.some(item => url.includes(item.urlFilter));
+  if (!isBlocked) {
+    lastSafeUrlMap.set(tabId, url);
+  }
+}
+
+// Track safe navigations
+chrome.webNavigation.onCommitted.addListener((details) => {
+  if (details.frameId !== 0) return;
+  trackSafeUrl(details.tabId, details.url);
+});
+
+chrome.webNavigation.onHistoryStateUpdated.addListener((details) => {
+  if (details.frameId !== 0) return;
+  trackSafeUrl(details.tabId, details.url);
+});
+
+// Fallback navigation inspector
+async function checkNavigation(details) {
   if (details.frameId !== 0) return; // Only intercept main page loads
   const data = await chrome.storage.local.get({ blockedUrls: [] });
   
   for (const item of data.blockedUrls) {
-    // We do a simple includes match since our urlFilter is a substring
     if (details.url.includes(item.urlFilter)) {
-      const redirectUrl = chrome.runtime.getURL(`blocked.html${isSpa ? '?spa=1' : ''}`);
-      chrome.tabs.update(details.tabId, { url: redirectUrl });
+      chrome.tabs.update(details.tabId, {
+        url: chrome.runtime.getURL('blocked.html')
+      });
       break;
     }
   }
 }
 
 // Intercept standard full page loads
-chrome.webNavigation.onBeforeNavigate.addListener((details) => checkNavigation(details, false));
+chrome.webNavigation.onBeforeNavigate.addListener(checkNavigation);
 
-// Intercept Single Page Application (SPA) client-side route changes (like X/Twitter searches)
-chrome.webNavigation.onHistoryStateUpdated.addListener((details) => checkNavigation(details, true));
+// Intercept Single Page Application (SPA) client-side route changes
+chrome.webNavigation.onHistoryStateUpdated.addListener(checkNavigation);
+
+/**
+ * Navigates the tab to its last recorded safe URL, avoiding history loops.
+ */
+async function handleGoBack(tab) {
+  if (!tab || !tab.id) return { success: false };
+  const safeUrl = lastSafeUrlMap.get(tab.id);
+  if (safeUrl) {
+    await chrome.tabs.update(tab.id, { url: safeUrl });
+  } else {
+    // If there is no previous safe URL for this tab (e.g. opened directly), go to new tab / blank
+    await chrome.tabs.update(tab.id, { url: 'about:blank' });
+  }
+  return { success: true };
+}
 
 /**
  * Parses a user-pasted URL into a declarativeNetRequest urlFilter pattern.
- * Strips protocol and query params, keeps hostname + pathname.
  */
 function buildUrlFilter(rawUrl) {
   const urlObj = new URL(rawUrl);
-  // Strip 'www.' to block the root domain and all its subdomains correctly
   let hostname = urlObj.hostname;
   if (hostname.startsWith('www.')) {
     hostname = hostname.substring(4);
   }
   let pathname = urlObj.pathname;
-  // Strip trailing slash for consistency (unless it's just "/")
   if (pathname.length > 1 && pathname.endsWith('/')) {
     pathname = pathname.slice(0, -1);
   }
-  // Use a simple substring match instead of || anchoring, which is more resilient
   return `${hostname}${pathname}`;
 }
 
 async function addBlockedUrl(rawUrl) {
   try {
-    // Validate URL
     const urlObj = new URL(rawUrl);
     const urlFilter = buildUrlFilter(rawUrl);
     
-    // Canonical form for duplicate checking
     let host = urlObj.hostname;
     if (host.startsWith('www.')) host = host.substring(4);
     const canonical = `${urlObj.protocol}//${host}${urlObj.pathname.replace(/\/$/, '') || '/'}`;
 
-    // Load existing data
     const data = await chrome.storage.local.get({ blockedUrls: [], nextRuleId: 1 });
 
-    // Check for duplicates
     if (data.blockedUrls.some(item => item.canonical === canonical)) {
       return { success: false, error: 'This URL is already blocked' };
     }
 
     const ruleId = data.nextRuleId;
 
-    // Create a dynamic redirect rule
     await chrome.declarativeNetRequest.updateDynamicRules({
       addRules: [{
         id: ruleId,
-        priority: 100, // Higher priority to override any default browser allow-lists
+        priority: 100,
         action: {
           type: 'redirect',
           redirect: { extensionPath: '/blocked.html' }
@@ -138,7 +180,6 @@ async function addBlockedUrl(rawUrl) {
       }]
     });
 
-    // Persist
     data.blockedUrls.push({
       id: ruleId,
       url: rawUrl,
@@ -151,6 +192,20 @@ async function addBlockedUrl(rawUrl) {
       blockedUrls: data.blockedUrls,
       nextRuleId: ruleId + 1
     });
+
+    // Auto-redirect any existing open tabs that match the newly blocked URL
+    try {
+      const openTabs = await chrome.tabs.query({});
+      for (const tab of openTabs) {
+        if (tab.url && tab.url.includes(urlFilter)) {
+          chrome.tabs.update(tab.id, {
+            url: chrome.runtime.getURL('blocked.html')
+          });
+        }
+      }
+    } catch (tabErr) {
+      console.error('Failed to auto-redirect open matching tabs:', tabErr);
+    }
 
     return { success: true };
   } catch (err) {
