@@ -60,7 +60,8 @@ async function syncRules() {
 }
 
 // BULLETPROOF FALLBACK: Manually intercept and redirect if DNR fails natively
-chrome.webNavigation.onBeforeNavigate.addListener(async (details) => {
+// Abstracted check logic so we can call it on both full navigations and SPA history updates.
+async function checkNavigation(details) {
   if (details.frameId !== 0) return; // Only intercept main page loads
   const data = await chrome.storage.local.get({ blockedUrls: [] });
   
@@ -73,7 +74,13 @@ chrome.webNavigation.onBeforeNavigate.addListener(async (details) => {
       break;
     }
   }
-});
+}
+
+// Intercept standard full page loads
+chrome.webNavigation.onBeforeNavigate.addListener(checkNavigation);
+
+// Intercept Single Page Application (SPA) client-side route changes (like X/Twitter searches)
+chrome.webNavigation.onHistoryStateUpdated.addListener(checkNavigation);
 
 /**
  * Parses a user-pasted URL into a declarativeNetRequest urlFilter pattern.
