@@ -1,4 +1,4 @@
-// ─── URL Blocker Service Worker ───
+// ─── ex-it Service Worker ───
 // Manages declarativeNetRequest dynamic rules for blocking URLs.
 
 chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {

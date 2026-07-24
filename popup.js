@@ -1,4 +1,4 @@
-// ─── URL Blocker Popup Logic ───
+// ─── ex-it Popup Logic ───
 
 const urlInput = document.getElementById('urlInput');
 const addBtn   = document.getElementById('addBtn');

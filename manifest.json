@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "URL Blocker",
+  "name": "ex-it",
   "version": "1.0.0",
-  "description": "Block specific URLs to protect your peace of mind.",
+  "description": "Block specific URLs to help you move on.",
   "permissions": [
     "declarativeNetRequest",
     "declarativeNetRequestWithHostAccess",
