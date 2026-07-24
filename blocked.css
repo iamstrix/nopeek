@@ -1,0 +1,155 @@
+/* ─── Blocked Page ─── */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  background: #08080a;
+  color: #e4e4ec;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── Ambient Glow ─── */
+.ambient {
+  position: fixed;
+  top: 45%;
+  left: 50%;
+  width: 650px;
+  height: 650px;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.07) 0%, transparent 65%);
+  pointer-events: none;
+  animation: breathe 7s ease-in-out infinite;
+}
+
+.ambient-secondary {
+  position: fixed;
+  top: 55%;
+  left: 45%;
+  width: 400px;
+  height: 400px;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.05) 0%, transparent 60%);
+  pointer-events: none;
+  animation: breathe 9s ease-in-out 2s infinite;
+}
+
+@keyframes breathe {
+  0%, 100% {
+    opacity: 0.5;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.15);
+  }
+}
+
+/* ─── Content ─── */
+.container {
+  text-align: center;
+  max-width: 520px;
+  padding: 48px 40px;
+  position: relative;
+  z-index: 1;
+  animation: fadeUp 0.7s ease-out;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ─── Shield Icon ─── */
+.shield {
+  margin-bottom: 36px;
+  color: #6366f1;
+  animation: fadeUp 0.9s ease-out;
+}
+
+.shield svg {
+  filter: drop-shadow(0 0 24px rgba(99, 102, 241, 0.3));
+}
+
+/* ─── Typography ─── */
+h1 {
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 1.3;
+  margin-bottom: 18px;
+  background: linear-gradient(135deg, #f0f0f5 20%, #8b8b9a 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.subtext {
+  font-size: 15px;
+  line-height: 1.7;
+  color: #64647a;
+  margin-bottom: 44px;
+}
+
+/* ─── Buttons ─── */
+.actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.btn {
+  padding: 13px 32px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+  -webkit-font-smoothing: antialiased;
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.05);
+  color: #9898a8;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.09);
+  color: #d0d0da;
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #6366f1, #7c3aed);
+  color: #fff;
+  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.25);
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #818cf8, #8b5cf6);
+  box-shadow: 0 6px 28px rgba(99, 102, 241, 0.35);
+  transform: translateY(-1px);
+}
+
+.btn:active {
+  transform: scale(0.97) !important;
+}
