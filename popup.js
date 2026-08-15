@@ -167,7 +167,7 @@ function renderList(entries) {
     <div class="url-item" data-id="${entry.id}">
       <div class="url-info">
         <span class="url-alias">${escapeHtml(entry.alias)}</span>
-        <span class="url-meta">${escapeHtml(describe(entry))}</span>
+        <span class="url-meta">${escapeHtml(`Blocked ${formatDate(entry.addedAt)}`)}</span>
       </div>
       ${unlockPill(entry)}
       <button class="btn-remove" data-id="${entry.id}" title="Unblock (needs your phrase)">
@@ -190,11 +190,6 @@ function unlockPill(entry) {
   const remaining = entry.unlockUntil ? entry.unlockUntil - Date.now() : 0;
   if (remaining <= 0) return '';
   return `<span class="unlock-pill">open · ${Math.ceil(remaining / 60000)}m</span>`;
-}
-
-function describe(entry) {
-  const since = formatDate(entry.addedAt);
-  return entry.hits ? `${entry.hits} hits · ${since}` : `Never hit · ${since}`;
 }
 
 function formatDate(ts) {

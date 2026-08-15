@@ -1,9 +1,9 @@
 // ─── Blocked Page Handlers ───
 // Separate JS file to comply with extension CSP (no inline event handlers).
 //
-// This page shows the entry's codename and how often you've landed here, but
-// never the URL and never a way out. The block page is the moment of peak
-// temptation, so it stays a dead end by design.
+// This page shows the entry's codename, but never the URL and never a way out.
+// The block page is the moment of peak temptation, so it stays a dead end by
+// design — no counters, no scoreboard, nothing to argue with.
 
 document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('goBackBtn').addEventListener('click', () => {
@@ -25,17 +25,12 @@ async function showTally() {
   if (!meta || !meta.alias) return;
 
   const tally = document.getElementById('tally');
-  const times = meta.hits === 1 ? 'once' : `${meta.hits} times`;
 
   tally.innerHTML = '';
   tally.append(
     buildAlias(meta.alias),
     document.createElement('br'),
-    document.createTextNode(
-      meta.hits > 0
-        ? `You've been here ${times}. Take a breath.`
-        : "Take a breath. You're doing fine."
-    )
+    document.createTextNode("Take a breath. You're doing fine.")
   );
 }
 

@@ -5,7 +5,6 @@
 
 const overlay = document.getElementById('gateOverlay');
 const aliasEl = document.getElementById('gateAlias');
-const leadEl = document.getElementById('gateLead');
 const phraseEl = document.getElementById('gatePhrase');
 const inputEl = document.getElementById('gateInput');
 const progressBar = document.getElementById('gateProgressBar');
@@ -34,9 +33,6 @@ export function openGate(entry, gate) {
     session = { entry, gate, resolve, timer: null, unlockedAt: 0 };
 
     aliasEl.textContent = entry.alias;
-    leadEl.textContent = entry.hits
-      ? `Blocked ${entry.hits}× already. Still want in?`
-      : 'Still want in?';
     phraseEl.textContent = gate.phrase;
     tempBtn.textContent = `Open ${gate.tempUnlockMinutes}m`;
 

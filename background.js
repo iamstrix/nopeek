@@ -340,6 +340,9 @@ chrome.webNavigation.onHistoryStateUpdated.addListener(async (details) => {
 /**
  * Increments the visit counter, ignoring repeats of the same block within a
  * short window so one navigation seen by two listeners only counts once.
+ *
+ * `hits` / `lastHitAt` are diagnostics only — nothing in the UI surfaces them.
+ * Showing someone their own relapse count is a scoreboard for shame, not help.
  */
 function countHit(tabId, entryId) {
   const key = `${tabId}:${entryId}`;
