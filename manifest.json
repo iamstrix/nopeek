@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "ex-it",
+  "name": "Nopeek",
   "version": "1.0.0",
   "description": "Block specific URLs to help you move on.",
   "permissions": [
@@ -31,8 +31,14 @@
   },
   "web_accessible_resources": [
     {
-      "resources": ["blocked.html", "blocked.css", "blocked.js"],
-      "matches": ["<all_urls>"]
+      "resources": [
+        "blocked.html",
+        "blocked.css",
+        "blocked.js"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
     }
   ]
 }

@@ -1,9 +1,9 @@
 // ─── ex-it Popup Logic ───
 
 const urlInput = document.getElementById('urlInput');
-const addBtn   = document.getElementById('addBtn');
-const urlList  = document.getElementById('urlList');
-const countEl  = document.getElementById('count');
+const addBtn = document.getElementById('addBtn');
+const urlList = document.getElementById('urlList');
+const countEl = document.getElementById('count');
 const feedback = document.getElementById('feedback');
 
 let feedbackTimer = null;
@@ -136,5 +136,5 @@ function escapeHtml(text) {
 
 function escapeAttr(text) {
   return text.replace(/&/g, '&amp;').replace(/"/g, '&quot;')
-             .replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    .replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }

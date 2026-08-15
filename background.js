@@ -1,4 +1,4 @@
-// ─── ex-it Service Worker ───
+// ─── Nopeek Service Worker ───
 // Manages declarativeNetRequest dynamic rules and per-tab navigation tracking.
 
 // In-memory tracker for the last safe (unblocked) URL per tab
@@ -100,10 +100,16 @@ chrome.webNavigation.onHistoryStateUpdated.addListener((details) => {
 async function checkNavigation(details) {
   if (details.frameId !== 0) return; // Only intercept main page loads
   const data = await chrome.storage.local.get({ blockedUrls: [] });
-  
+
   for (const item of data.blockedUrls) {
     if (details.url.includes(item.urlFilter)) {
-      chrome.tabs.update(details.tabId, {
+      try {
+        // Step back in history first so the blocked SPA entry is erased from the tab history stack
+        await chrome.tabs.goBack(details.tabId);
+      } catch (e) {
+        // Ignore error if tab has no previous history entry
+      }
+      await chrome.tabs.update(details.tabId, {
         url: chrome.runtime.getURL('blocked.html')
       });
       break;
@@ -122,12 +128,15 @@ chrome.webNavigation.onHistoryStateUpdated.addListener(checkNavigation);
  */
 async function handleGoBack(tab) {
   if (!tab || !tab.id) return { success: false };
-  const safeUrl = lastSafeUrlMap.get(tab.id);
-  if (safeUrl) {
-    await chrome.tabs.update(tab.id, { url: safeUrl });
-  } else {
-    // If there is no previous safe URL for this tab (e.g. opened directly), go to new tab / blank
-    await chrome.tabs.update(tab.id, { url: 'about:blank' });
+  try {
+    await chrome.tabs.goBack(tab.id);
+  } catch (err) {
+    const safeUrl = lastSafeUrlMap.get(tab.id);
+    if (safeUrl) {
+      await chrome.tabs.update(tab.id, { url: safeUrl });
+    } else {
+      await chrome.tabs.update(tab.id, { url: 'about:blank' });
+    }
   }
   return { success: true };
 }
@@ -152,7 +161,7 @@ async function addBlockedUrl(rawUrl) {
   try {
     const urlObj = new URL(rawUrl);
     const urlFilter = buildUrlFilter(rawUrl);
-    
+
     let host = urlObj.hostname;
     if (host.startsWith('www.')) host = host.substring(4);
     const canonical = `${urlObj.protocol}//${host}${urlObj.pathname.replace(/\/$/, '') || '/'}`;
