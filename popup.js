@@ -1,4 +1,22 @@
-// ─── ex-it Popup Logic ───
+// ─── Nopeek Popup Logic ───
+// The list deliberately never shows a URL. Seeing the things you're avoiding is
+// itself the cue you're trying to avoid, so entries are named, not spelled out.
+
+import { loadGate, saveGate, openGate } from './gate.js';
+
+const setupView = document.getElementById('setupView');
+const setupLead = document.getElementById('setupLead');
+const setupConfirm = document.getElementById('setupConfirm');
+const currentPhrase = document.getElementById('currentPhrase');
+const confirmInput = document.getElementById('confirmInput');
+const mainView = document.getElementById('mainView');
+const phraseInput = document.getElementById('phraseInput');
+const cooldownInput = document.getElementById('cooldownInput');
+const tempUnlockInput = document.getElementById('tempUnlockInput');
+const saveGateBtn = document.getElementById('saveGateBtn');
+const setupCancelBtn = document.getElementById('setupCancelBtn');
+const editPhraseBtn = document.getElementById('editPhraseBtn');
+const setupFeedback = document.getElementById('setupFeedback');
 
 const urlInput = document.getElementById('urlInput');
 const addBtn = document.getElementById('addBtn');
@@ -7,15 +25,79 @@ const countEl = document.getElementById('count');
 const feedback = document.getElementById('feedback');
 
 let feedbackTimer = null;
+let gate = null;
 
 // ─── Init ───
-document.addEventListener('DOMContentLoaded', loadUrls);
+init();
+
 addBtn.addEventListener('click', addUrl);
 urlInput.addEventListener('keydown', (e) => {
   if (e.key === 'Enter') addUrl();
 });
+saveGateBtn.addEventListener('click', submitGate);
+editPhraseBtn.addEventListener('click', showSetup);
+setupCancelBtn.addEventListener('click', showMain);
 
-// ─── Load blocked URLs from storage ───
+// Same reasoning as the gate itself: the new phrase has to be typed, not pasted.
+for (const evt of ['paste', 'drop', 'contextmenu']) {
+  confirmInput.addEventListener(evt, e => e.preventDefault());
+}
+
+async function init() {
+  gate = await loadGate();
+  if (gate.configured) showMain();
+  else showSetup();
+}
+
+// ─── Setup, first-run and edit ───
+function showSetup() {
+  const editing = gate.configured;
+
+  setupLead.textContent = editing
+    ? 'Want a new phrase? Type the old one first.'
+    : "Pick the sentence you'll have to type out by hand every time you want back in.";
+
+  setupConfirm.classList.toggle('hidden', !editing);
+  setupCancelBtn.classList.toggle('hidden', !editing);
+  saveGateBtn.textContent = editing ? 'Replace it' : 'Lock it in';
+
+  if (editing) {
+    currentPhrase.textContent = gate.phrase;
+    confirmInput.value = '';
+    phraseInput.value = gate.phrase;
+    cooldownInput.value = String(gate.cooldownSeconds);
+    tempUnlockInput.value = String(gate.tempUnlockMinutes);
+  }
+
+  mainView.classList.add('hidden');
+  setupView.classList.remove('hidden');
+  (editing ? confirmInput : phraseInput).focus();
+}
+
+function showMain() {
+  setupView.classList.add('hidden');
+  mainView.classList.remove('hidden');
+  loadUrls();
+}
+
+async function submitGate() {
+  const response = await saveGate({
+    phrase: phraseInput.value,
+    cooldownSeconds: Number(cooldownInput.value),
+    tempUnlockMinutes: Number(tempUnlockInput.value)
+  }, confirmInput.value);
+
+  if (!response.success) {
+    showFeedback(response.error, 'error', setupFeedback);
+    return;
+  }
+
+  gate = await loadGate();
+  showMain();
+  showFeedback('Phrase saved', 'success');
+}
+
+// ─── Load blocked entries from storage ───
 async function loadUrls() {
   const response = await chrome.runtime.sendMessage({ action: 'getUrls' });
   renderList(response.urls);
@@ -33,7 +115,7 @@ async function addUrl() {
   try {
     new URL(raw);
   } catch {
-    showFeedback('Enter a valid URL (include https://)', 'error');
+    showFeedback('Need a full URL, with https://', 'error');
     return;
   }
 
@@ -44,29 +126,27 @@ async function addUrl() {
   if (response.success) {
     urlInput.value = '';
     urlInput.focus();
-    showFeedback('URL blocked ✓', 'success');
+    showFeedback(`Blocked as “${response.alias}”`, 'success');
     loadUrls();
   } else {
     showFeedback(response.error, 'error');
   }
 }
 
-// ─── Remove a URL ───
-async function removeUrl(ruleId) {
-  const response = await chrome.runtime.sendMessage({ action: 'removeUrl', id: ruleId });
-  if (response.success) {
-    showFeedback('URL unblocked', 'success');
+// ─── Unblocking goes through the gate ───
+async function requestUnblock(entry) {
+  const { changed, message } = await openGate(entry, gate);
+  if (changed) {
+    showFeedback(message, 'success');
     loadUrls();
-  } else {
-    showFeedback(response.error || 'Failed to remove', 'error');
   }
 }
 
 // ─── Render the list ───
-function renderList(urls) {
-  countEl.textContent = urls.length;
+function renderList(entries) {
+  countEl.textContent = entries.length;
 
-  if (urls.length === 0) {
+  if (entries.length === 0) {
     urlList.innerHTML = `
       <div class="empty-state">
         <div class="empty-icon">
@@ -77,19 +157,20 @@ function renderList(urls) {
             <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>
           </svg>
         </div>
-        <p>No URLs blocked yet</p>
-        <p class="empty-sub">Paste a URL above to get started</p>
+        <p>Nothing blocked yet</p>
+        <p class="empty-sub">Paste one above to start</p>
       </div>`;
     return;
   }
 
-  urlList.innerHTML = urls.map(item => `
-    <div class="url-item" data-id="${item.id}">
+  urlList.innerHTML = entries.map(entry => `
+    <div class="url-item" data-id="${entry.id}">
       <div class="url-info">
-        <span class="url-text" title="${escapeAttr(item.url)}">${escapeHtml(displayUrl(item.url))}</span>
-        <span class="url-date">${formatDate(item.addedAt)}</span>
+        <span class="url-alias">${escapeHtml(entry.alias)}</span>
+        <span class="url-meta">${escapeHtml(`Blocked ${formatDate(entry.addedAt)}`)}</span>
       </div>
-      <button class="btn-remove" data-id="${item.id}" title="Unblock this URL">
+      ${unlockPill(entry)}
+      <button class="btn-remove" data-id="${entry.id}" title="Unblock (needs your phrase)">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
              stroke="currentColor" stroke-width="2" stroke-linecap="round">
           <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -100,41 +181,34 @@ function renderList(urls) {
 
   // Attach click handlers
   urlList.querySelectorAll('.btn-remove').forEach(btn => {
-    btn.addEventListener('click', () => removeUrl(Number(btn.dataset.id)));
+    const entry = entries.find(item => item.id === Number(btn.dataset.id));
+    btn.addEventListener('click', () => requestUnblock(entry));
   });
 }
 
+function unlockPill(entry) {
+  const remaining = entry.unlockUntil ? entry.unlockUntil - Date.now() : 0;
+  if (remaining <= 0) return '';
+  return `<span class="unlock-pill">open · ${Math.ceil(remaining / 60000)}m</span>`;
+}
+
+function formatDate(ts) {
+  return new Date(ts).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+}
+
 // ─── Feedback toast ───
-function showFeedback(message, type) {
+function showFeedback(message, type, target = feedback) {
   clearTimeout(feedbackTimer);
-  feedback.textContent = message;
-  feedback.className = `feedback ${type}`;
+  target.textContent = message;
+  target.className = `feedback ${type}`;
   feedbackTimer = setTimeout(() => {
-    feedback.className = 'feedback hidden';
+    target.className = 'feedback hidden';
   }, 2500);
 }
 
 // ─── Helpers ───
-function displayUrl(url) {
-  // Strip protocol for a cleaner display
-  return url.replace(/^https?:\/\//, '');
-}
-
-function formatDate(ts) {
-  return new Date(ts).toLocaleDateString(undefined, {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric'
-  });
-}
-
 function escapeHtml(text) {
   const el = document.createElement('span');
   el.textContent = text;
   return el.innerHTML;
-}
-
-function escapeAttr(text) {
-  return text.replace(/&/g, '&amp;').replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }

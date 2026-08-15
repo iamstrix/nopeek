@@ -1,57 +1,5 @@
 /* ─── Nopeek Popup · Claymorphism Dark ─── */
-*,
-*::before,
-*::after {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-:root {
-  /* ── Palette ── */
-  --bg-base: #111113;
-  --bg-clay: #1e1e22;
-  --bg-clay-hover: #252529;
-  --border: rgba(255, 255, 255, 0.04);
-  --text-primary: #e8e8ec;
-  --text-secondary: #7a7a84;
-  --text-muted: #4a4a52;
-  --accent: #e8e8ec;
-  --accent-hover: #ffffff;
-  --danger: #e05555;
-  --danger-hover: #f07070;
-  --success: #4ade80;
-
-  /* ── Clay Shadows ── */
-  --clay-shadow:
-    8px 8px 16px rgba(0, 0, 0, 0.45),
-    inset -4px -4px 8px rgba(0, 0, 0, 0.3),
-    inset 4px 4px 8px rgba(255, 255, 255, 0.04);
-
-  --clay-shadow-hover:
-    4px 4px 10px rgba(0, 0, 0, 0.5),
-    inset -3px -3px 6px rgba(0, 0, 0, 0.35),
-    inset 3px 3px 6px rgba(255, 255, 255, 0.06);
-
-  --clay-shadow-pressed:
-    2px 2px 6px rgba(0, 0, 0, 0.5),
-    inset -2px -2px 4px rgba(0, 0, 0, 0.4),
-    inset 2px 2px 4px rgba(255, 255, 255, 0.03);
-
-  --clay-shadow-sm:
-    4px 4px 10px rgba(0, 0, 0, 0.35),
-    inset -2px -2px 5px rgba(0, 0, 0, 0.25),
-    inset 2px 2px 5px rgba(255, 255, 255, 0.035);
-
-  --clay-shadow-sm-hover:
-    2px 2px 6px rgba(0, 0, 0, 0.4),
-    inset -2px -2px 4px rgba(0, 0, 0, 0.3),
-    inset 2px 2px 4px rgba(255, 255, 255, 0.05);
-
-  /* ── Geometry ── */
-  --radius: 16px;
-  --radius-lg: 24px;
-}
+/* Tokens and the reset live in theme.css, linked ahead of this file. */
 
 body {
   width: 380px;
@@ -74,6 +22,7 @@ body {
 .header {
   display: flex;
   align-items: center;
+  justify-content: space-between;
 }
 
 .logo {
@@ -282,7 +231,7 @@ h1 {
 }
 
 .url-item:nth-child(3) {
-  animation-delay: 0.03s;
+  animation-delay: 0.06s;
 }
 
 .url-item:nth-child(4) {
@@ -338,18 +287,32 @@ h1 {
   flex: 1;
 }
 
-.url-text {
+/* Codename, never the URL — the list must not become the cue it protects you from. */
+.url-alias {
   font-size: 12px;
-  font-weight: 500;
+  font-weight: 600;
+  letter-spacing: 0.01em;
   color: var(--text-primary);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.url-date {
+.url-meta {
   font-size: 10px;
   color: var(--text-muted);
+}
+
+.unlock-pill {
+  flex-shrink: 0;
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--success);
+  background: rgba(74, 222, 128, 0.1);
+  border-radius: 99px;
+  padding: 3px 8px;
 }
 
 .btn-remove {
@@ -403,4 +366,367 @@ h1 {
   color: var(--text-muted);
   font-size: 11px;
   font-weight: 400;
+}
+
+/* ─── Utility ─── */
+.hidden {
+  display: none !important;
+}
+
+.btn-icon {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 7px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+
+.btn-icon:hover {
+  color: var(--text-primary);
+  background: var(--bg-clay);
+}
+
+.btn-icon:active {
+  transform: scale(0.9);
+}
+
+.btn-text {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-family: inherit;
+  font-size: 11.5px;
+  padding: 6px;
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+.btn-text:hover {
+  color: var(--text-secondary);
+}
+
+/* ─── First-run Setup ─── */
+.setup-view {
+  display: flex;
+  flex-direction: column;
+  padding: 24px 20px 20px;
+  gap: 12px;
+}
+
+.setup-lead {
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+.setup-input {
+  resize: none;
+}
+
+.setup-confirm {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.setup-hint {
+  font-size: 10px;
+  color: var(--text-muted);
+  margin-top: -6px;
+}
+
+.setup-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.setup-row label {
+  font-size: 11.5px;
+  color: var(--text-secondary);
+}
+
+.setup-select {
+  margin-left: auto;
+  background: var(--bg-clay);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: var(--clay-shadow-sm);
+  font-family: inherit;
+  font-size: 11.5px;
+  padding: 7px 9px;
+  cursor: pointer;
+  outline: none;
+}
+
+/* ─── Info Tooltips ─── */
+.info {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  background: none;
+  border: none;
+  border-radius: 50%;
+  color: var(--text-muted);
+  cursor: help;
+  transition: color 0.15s ease;
+}
+
+.info:hover,
+.info:focus-visible {
+  color: var(--text-primary);
+  outline: none;
+}
+
+/* Spans the full row width so a long tip can never overflow the 380px popup. */
+.tip {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(100% + 8px);
+  z-index: 5;
+  padding: 10px 12px;
+  font-size: 10.5px;
+  line-height: 1.55;
+  color: var(--text-secondary);
+  background: var(--bg-clay);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: var(--clay-shadow-sm);
+  /* Hidden with opacity rather than `visibility`/`display` so it stays in the
+     accessibility tree — aria-describedby can't reach a hidden element. */
+  opacity: 0;
+  transform: translateY(3px);
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  pointer-events: none;
+}
+
+.info:hover ~ .tip,
+.info:focus-visible ~ .tip {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.btn-wide {
+  margin-top: 6px;
+  padding: 12px;
+  background: var(--accent);
+  color: var(--bg-base);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius);
+  box-shadow: var(--clay-shadow-sm);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s ease, box-shadow 0.2s ease, transform 0.15s ease;
+}
+
+.btn-wide:hover {
+  background: var(--accent-hover);
+  box-shadow: var(--clay-shadow-sm-hover);
+}
+
+.btn-wide:active {
+  box-shadow: var(--clay-shadow-pressed);
+  transform: scale(0.97);
+}
+
+/* ─── The Gate ─── */
+.gate-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(10, 10, 12, 0.72);
+  backdrop-filter: blur(6px);
+  animation: gateIn 0.18s ease-out;
+}
+
+@keyframes gateIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.gate-card {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px 18px;
+  background: var(--bg-clay);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--clay-shadow);
+}
+
+.gate-alias {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.gate-lead {
+  font-size: 11.5px;
+  color: var(--text-secondary);
+  margin-top: -6px;
+}
+
+.gate-label {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+/* Unselectable on purpose: copying the phrase would skip the entire point. */
+.gate-phrase {
+  user-select: none;
+  -webkit-user-select: none;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--text-primary);
+  background: var(--bg-base);
+  border-radius: 12px;
+  padding: 12px 14px;
+  box-shadow:
+    inset -2px -2px 5px rgba(0, 0, 0, 0.35),
+    inset 2px 2px 5px rgba(255, 255, 255, 0.02);
+}
+
+.gate-input {
+  width: 100%;
+  resize: none;
+  background: var(--bg-clay);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: var(--clay-shadow-sm);
+  font-family: inherit;
+  font-size: 13px;
+  line-height: 1.5;
+  padding: 11px 13px;
+  outline: none;
+  transition: box-shadow 0.2s ease;
+}
+
+.gate-input::placeholder {
+  color: var(--text-muted);
+}
+
+.gate-input:focus {
+  box-shadow: var(--clay-shadow-sm-hover);
+}
+
+.gate-progress {
+  height: 4px;
+  border-radius: 99px;
+  background: var(--bg-base);
+  overflow: hidden;
+}
+
+.gate-progress-bar {
+  height: 100%;
+  width: 0;
+  border-radius: 99px;
+  background: var(--success);
+  transition: width 0.12s linear, background 0.15s ease;
+}
+
+.gate-progress-bar.wrong {
+  background: var(--danger);
+}
+
+.gate-status {
+  font-size: 10.5px;
+  min-height: 14px;
+  color: var(--text-muted);
+}
+
+.gate-status.waiting {
+  color: var(--text-secondary);
+}
+
+.gate-status.ready {
+  color: var(--success);
+}
+
+.gate-status.wrong {
+  color: var(--danger);
+}
+
+.gate-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.btn-gate {
+  flex: 1;
+  padding: 10px 6px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg-clay);
+  box-shadow: var(--clay-shadow-sm);
+  color: var(--text-secondary);
+  font-family: inherit;
+  font-size: 11.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.15s ease, background 0.15s ease, box-shadow 0.2s ease, opacity 0.15s ease;
+}
+
+.btn-gate:hover:not(:disabled) {
+  background: var(--bg-clay-hover);
+  box-shadow: var(--clay-shadow-sm-hover);
+}
+
+.btn-gate:active:not(:disabled) {
+  box-shadow: var(--clay-shadow-pressed);
+  transform: scale(0.96);
+}
+
+.btn-gate:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Backing out is always available, so it doesn't need to compete for space. */
+.btn-cancel {
+  flex: 0 0 auto;
+  padding: 10px 12px;
+  color: var(--text-muted);
+}
+
+.btn-temp:not(:disabled) {
+  color: var(--text-primary);
+}
+
+.btn-danger:not(:disabled) {
+  color: var(--danger);
+}
+
+.btn-danger:not(:disabled):hover {
+  color: var(--danger-hover);
 }

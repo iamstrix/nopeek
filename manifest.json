@@ -1,20 +1,22 @@
 {
   "manifest_version": 3,
   "name": "Nopeek",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Block specific URLs to help you move on.",
   "permissions": [
     "declarativeNetRequest",
     "declarativeNetRequestWithHostAccess",
     "webNavigation",
     "storage",
-    "tabs"
+    "tabs",
+    "alarms"
   ],
   "host_permissions": [
     "<all_urls>"
   ],
   "background": {
-    "service_worker": "background.js"
+    "service_worker": "background.js",
+    "type": "module"
   },
   "action": {
     "default_popup": "popup.html",
@@ -34,7 +36,8 @@
       "resources": [
         "blocked.html",
         "blocked.css",
-        "blocked.js"
+        "blocked.js",
+        "theme.css"
       ],
       "matches": [
         "<all_urls>"

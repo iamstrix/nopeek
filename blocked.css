@@ -1,40 +1,5 @@
 /* ─── Blocked Page · Claymorphism Dark ─── */
-*,
-*::before,
-*::after {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-:root {
-  --bg-base: #111113;
-  --bg-clay: #1e1e22;
-  --bg-clay-hover: #252529;
-  --text-primary: #e8e8ec;
-  --text-secondary: #7a7a84;
-  --text-muted: #4a4a52;
-  --accent: #e8e8ec;
-  --accent-hover: #ffffff;
-
-  --clay-shadow:
-    8px 8px 16px rgba(0, 0, 0, 0.45),
-    inset -4px -4px 8px rgba(0, 0, 0, 0.3),
-    inset 4px 4px 8px rgba(255, 255, 255, 0.04);
-
-  --clay-shadow-hover:
-    4px 4px 10px rgba(0, 0, 0, 0.5),
-    inset -3px -3px 6px rgba(0, 0, 0, 0.35),
-    inset 3px 3px 6px rgba(255, 255, 255, 0.06);
-
-  --clay-shadow-pressed:
-    2px 2px 6px rgba(0, 0, 0, 0.5),
-    inset -2px -2px 4px rgba(0, 0, 0, 0.4),
-    inset 2px 2px 4px rgba(255, 255, 255, 0.03);
-
-  --radius: 16px;
-  --radius-lg: 24px;
-}
+/* Tokens and the reset live in theme.css, linked ahead of this file. */
 
 body {
   min-height: 100vh;
@@ -131,6 +96,26 @@ h1 {
   line-height: 1.7;
   color: var(--text-secondary);
   margin-bottom: 44px;
+}
+
+/* The entry's codename — deliberately the only identifier this page carries. */
+.alias {
+  display: inline-block;
+  margin-bottom: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--text-primary);
+  background: var(--bg-clay);
+  border-radius: 99px;
+  padding: 5px 14px;
+  box-shadow: var(--clay-shadow-sm);
+}
+
+.footnote {
+  margin-top: 32px;
+  font-size: 12px;
+  color: var(--text-muted);
 }
 
 /* ─── Buttons ─── */
