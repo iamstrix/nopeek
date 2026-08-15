@@ -33,8 +33,8 @@ async function showTally() {
     document.createElement('br'),
     document.createTextNode(
       meta.hits > 0
-        ? `You've come here ${times}. Take a deep breath.`
-        : "Take a deep breath. You're doing the right thing."
+        ? `You've been here ${times}. Take a breath.`
+        : "Take a breath. You're doing fine."
     )
   );
 }

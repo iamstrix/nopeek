@@ -13,11 +13,11 @@ export function parseTarget(rawUrl) {
   const urlObj = new URL(rawUrl);
 
   if (urlObj.protocol !== 'http:' && urlObj.protocol !== 'https:') {
-    throw new Error('Only http and https URLs can be blocked');
+    throw new Error('Only http and https links.');
   }
 
   const host = urlObj.hostname.replace(/^www\./, '').toLowerCase();
-  if (!host) throw new Error('That URL has no hostname');
+  if (!host) throw new Error("That's not a real URL.");
 
   let path = urlObj.pathname;
   if (path.length > 1 && path.endsWith('/')) path = path.slice(0, -1);

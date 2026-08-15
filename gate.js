@@ -35,7 +35,7 @@ export function openGate(entry, gate) {
 
     aliasEl.textContent = entry.alias;
     leadEl.textContent = entry.hits
-      ? `Blocked ${entry.hits} ${entry.hits === 1 ? 'time' : 'times'}. Still want in?`
+      ? `Blocked ${entry.hits}× already. Still want in?`
       : 'Still want in?';
     phraseEl.textContent = gate.phrase;
     tempBtn.textContent = `Open ${gate.tempUnlockMinutes}m`;
@@ -87,7 +87,7 @@ function tick() {
   const remaining = Math.max(0, session.unlockedAt - Date.now());
 
   if (remaining > 0) {
-    statusEl.textContent = `Available in ${Math.ceil(remaining / 1000)}s…`;
+    statusEl.textContent = `Wait ${Math.ceil(remaining / 1000)}s…`;
     statusEl.className = 'gate-status waiting';
     setArmed(false);
     return;
@@ -123,7 +123,7 @@ function evaluate() {
     statusEl.textContent = 'Go on, then.';
     statusEl.className = 'gate-status ready';
   } else if (typed.length && correct < typed.length) {
-    statusEl.textContent = 'Typo. Start that word again.';
+    statusEl.textContent = 'Typo — back up.';
     statusEl.className = 'gate-status wrong';
     progressBar.classList.add('wrong');
   } else {
@@ -167,7 +167,7 @@ tempBtn.addEventListener('click', async () => {
   const response = await chrome.runtime.sendMessage({
     action: 'tempUnlock', id: entry.id, confirm: inputEl.value
   });
-  finish(response, `Open for ${gate.tempUnlockMinutes} minutes.`);
+  finish(response, `Open for ${gate.tempUnlockMinutes} min.`);
 });
 
 removeBtn.addEventListener('click', async () => {
@@ -181,7 +181,7 @@ function finish(response, successMessage) {
   if (response && response.success) {
     close(true, true, successMessage);
   } else {
-    statusEl.textContent = (response && response.error) || 'That did not work';
+    statusEl.textContent = (response && response.error) || "Didn't work.";
     statusEl.className = 'gate-status wrong';
   }
 }

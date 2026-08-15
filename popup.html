@@ -24,13 +24,12 @@
     </div>
 
     <p class="setup-lead" id="setupLead">
-      Before you block anything, write your last stand — the sentence you'll have
-      to type out, by hand, every time you want back in.
+      Pick the sentence you'll have to type out by hand every time you want back in.
     </p>
 
     <!-- Edit mode only: changing the phrase is itself gated by the old one -->
     <div class="setup-confirm hidden" id="setupConfirm">
-      <p class="gate-label">Type your current phrase first:</p>
+      <p class="gate-label">Type your old phrase:</p>
       <div class="gate-phrase" id="currentPhrase"></div>
       <textarea id="confirmInput" class="gate-input setup-input" rows="2" spellcheck="false"
         placeholder="No pasting."></textarea>
@@ -39,7 +38,7 @@
 
     <textarea id="phraseInput" class="gate-input setup-input" rows="3" spellcheck="false"
       placeholder="I am an undisciplined boy"></textarea>
-    <p class="setup-hint">At least 12 characters. Make it sting.</p>
+    <p class="setup-hint">12 characters minimum. Make it sting.</p>
 
     <div class="setup-row">
       <label for="cooldownInput">Cooldown before unblocking</label>
@@ -52,8 +51,7 @@
         </svg>
       </button>
       <span class="tip" id="tipCooldown" role="tooltip">
-        A forced wait before the unblock buttons will work — it runs even after you've typed
-        your phrase correctly. Pure stalling, so the urge has time to pass.
+        How long you wait before the unblock buttons work, even with the phrase typed right.
       </span>
       <select id="cooldownInput" class="setup-select">
         <option value="0">None</option>
@@ -74,8 +72,7 @@
         </svg>
       </button>
       <span class="tip" id="tipTemp" role="tooltip">
-        How long “Open” lets you through before the site re-blocks itself. The entry stays on
-        your list the whole time — a lapse, not a deletion.
+        How long “Open” lets you in before the block comes back. The entry stays on your list.
       </span>
       <select id="tempUnlockInput" class="setup-select">
         <option value="1">1 minute</option>
@@ -118,7 +115,7 @@
     <!-- URL Input -->
     <div class="input-group">
       <input type="url" id="urlInput" placeholder="Paste a URL to block…" autocomplete="off" spellcheck="false">
-      <button id="addBtn" class="btn-add" title="Block this URL">
+      <button id="addBtn" class="btn-add" title="Block it">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
           stroke-linecap="round">
           <line x1="12" y1="5" x2="12" y2="19"></line>
@@ -147,7 +144,7 @@
           </svg>
         </div>
         <p>Nothing blocked yet</p>
-        <p class="empty-sub">Paste a URL above to get started</p>
+        <p class="empty-sub">Paste one above to start</p>
       </div>
     </div>
   </div>
@@ -162,7 +159,7 @@
       <div class="gate-phrase" id="gatePhrase"></div>
 
       <textarea id="gateInput" class="gate-input" rows="2" spellcheck="false" autocomplete="off"
-        placeholder="Type it out. No pasting."></textarea>
+        placeholder="No pasting."></textarea>
 
       <div class="gate-progress">
         <div class="gate-progress-bar" id="gateProgressBar"></div>

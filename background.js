@@ -373,7 +373,7 @@ async function addBlockedUrl(rawUrl) {
     const target = parseTarget(rawUrl);
 
     if (entryCache.some(entry => entry.canonical === target.canonical)) {
-      return { success: false, error: 'This URL is already blocked' };
+      return { success: false, error: 'Already blocked.' };
     }
 
     const data = await chrome.storage.local.get({ blockedUrls: [], nextRuleId: 1 });
@@ -439,7 +439,7 @@ async function tempUnlock(ruleId, confirm) {
     const unlockUntil = Date.now() + minutes * 60 * 1000;
 
     const found = await updateStoredEntry(ruleId, entry => { entry.unlockUntil = unlockUntil; });
-    if (!found) return { success: false, error: 'That entry no longer exists' };
+    if (!found) return { success: false, error: "That one's gone." };
 
     await chrome.declarativeNetRequest.updateDynamicRules({ removeRuleIds: [ruleId] });
     chrome.alarms.create(`relock:${ruleId}`, { when: unlockUntil });
@@ -513,9 +513,9 @@ async function getGate() {
  */
 async function checkGate(confirm) {
   const gate = await getGate();
-  if (!gate) return { success: false, error: 'Set up your phrase first' };
+  if (!gate) return { success: false, error: 'Set your phrase first.' };
   if ((confirm || '').trim() !== gate.phrase.trim()) {
-    return { success: false, error: 'That is not what the phrase says' };
+    return { success: false, error: "That's not the phrase." };
   }
   return null;
 }
@@ -531,7 +531,7 @@ async function setGate(settings, confirm) {
 
   const phrase = (settings.phrase || '').trim().replace(/\s+/g, ' ');
   if (phrase.length < 12) {
-    return { success: false, error: 'Make it at least 12 characters. Make it sting.' };
+    return { success: false, error: 'Too short — 12 characters minimum.' };
   }
 
   await chrome.storage.local.set({

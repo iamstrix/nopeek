@@ -54,8 +54,8 @@ function showSetup() {
   const editing = gate.configured;
 
   setupLead.textContent = editing
-    ? 'Rewriting your last stand takes the old one first. No shortcuts.'
-    : "Before you block anything, write your last stand — the sentence you'll have to type out, by hand, every time you want back in.";
+    ? 'Want a new phrase? Type the old one first.'
+    : "Pick the sentence you'll have to type out by hand every time you want back in.";
 
   setupConfirm.classList.toggle('hidden', !editing);
   setupCancelBtn.classList.toggle('hidden', !editing);
@@ -115,7 +115,7 @@ async function addUrl() {
   try {
     new URL(raw);
   } catch {
-    showFeedback('Enter a valid URL (include https://)', 'error');
+    showFeedback('Need a full URL, with https://', 'error');
     return;
   }
 
@@ -158,7 +158,7 @@ function renderList(entries) {
           </svg>
         </div>
         <p>Nothing blocked yet</p>
-        <p class="empty-sub">Paste a URL above to get started</p>
+        <p class="empty-sub">Paste one above to start</p>
       </div>`;
     return;
   }
@@ -170,7 +170,7 @@ function renderList(entries) {
         <span class="url-meta">${escapeHtml(describe(entry))}</span>
       </div>
       ${unlockPill(entry)}
-      <button class="btn-remove" data-id="${entry.id}" title="Unblock — needs your phrase">
+      <button class="btn-remove" data-id="${entry.id}" title="Unblock (needs your phrase)">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
              stroke="currentColor" stroke-width="2" stroke-linecap="round">
           <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -194,8 +194,7 @@ function unlockPill(entry) {
 
 function describe(entry) {
   const since = formatDate(entry.addedAt);
-  if (!entry.hits) return `No visits blocked · ${since}`;
-  return `${entry.hits} ${entry.hits === 1 ? 'visit' : 'visits'} blocked · ${since}`;
+  return entry.hits ? `${entry.hits} hits · ${since}` : `Never hit · ${since}`;
 }
 
 function formatDate(ts) {
