@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Blocked</title>
+  <link rel="stylesheet" href="theme.css">
   <link rel="stylesheet" href="blocked.css">
 </head>
 
@@ -25,7 +26,7 @@
 
     <h1>You set this boundary for a reason.</h1>
 
-    <p class="subtext">
+    <p class="subtext" id="tally">
       This page has been blocked by Nopeek.<br>
       Take a deep breath. You're doing the right thing.
     </p>
@@ -34,9 +35,11 @@
       <button id="goBackBtn" class="btn btn-secondary">Go Back</button>
       <button id="closeTabBtn" class="btn btn-primary">Close Tab</button>
     </div>
+
+    <p class="footnote">Unblocking lives behind the Nopeek toolbar icon — not here.</p>
   </main>
 
-  <script src="blocked.js"></script>
+  <script type="module" src="blocked.js"></script>
 </body>
 
 </html>
