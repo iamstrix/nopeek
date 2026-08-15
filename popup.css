@@ -441,10 +441,10 @@ h1 {
 }
 
 .setup-row {
+  position: relative;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 10px;
+  gap: 5px;
 }
 
 .setup-row label {
@@ -453,6 +453,7 @@ h1 {
 }
 
 .setup-select {
+  margin-left: auto;
   background: var(--bg-clay);
   color: var(--text-primary);
   border: 1px solid var(--border);
@@ -463,6 +464,57 @@ h1 {
   padding: 7px 9px;
   cursor: pointer;
   outline: none;
+}
+
+/* ─── Info Tooltips ─── */
+.info {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  background: none;
+  border: none;
+  border-radius: 50%;
+  color: var(--text-muted);
+  cursor: help;
+  transition: color 0.15s ease;
+}
+
+.info:hover,
+.info:focus-visible {
+  color: var(--text-primary);
+  outline: none;
+}
+
+/* Spans the full row width so a long tip can never overflow the 380px popup. */
+.tip {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(100% + 8px);
+  z-index: 5;
+  padding: 10px 12px;
+  font-size: 10.5px;
+  line-height: 1.55;
+  color: var(--text-secondary);
+  background: var(--bg-clay);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: var(--clay-shadow-sm);
+  /* Hidden with opacity rather than `visibility`/`display` so it stays in the
+     accessibility tree — aria-describedby can't reach a hidden element. */
+  opacity: 0;
+  transform: translateY(3px);
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  pointer-events: none;
+}
+
+.info:hover ~ .tip,
+.info:focus-visible ~ .tip {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .btn-wide {

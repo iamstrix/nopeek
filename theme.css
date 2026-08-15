@@ -10,6 +10,10 @@
 }
 
 :root {
+  /* Makes browser-drawn UI (select dropdowns, scrollbars, focus rings) follow
+     the dark palette instead of defaulting to light. */
+  color-scheme: dark;
+
   /* ── Palette ── */
   --bg-base: #111113;
   --bg-clay: #1e1e22;

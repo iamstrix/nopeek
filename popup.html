@@ -43,6 +43,18 @@
 
     <div class="setup-row">
       <label for="cooldownInput">Cooldown before unblocking</label>
+      <button type="button" class="info" aria-describedby="tipCooldown" aria-label="About the cooldown">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10" />
+          <line x1="12" y1="16" x2="12" y2="12" />
+          <line x1="12" y1="8" x2="12.01" y2="8" />
+        </svg>
+      </button>
+      <span class="tip" id="tipCooldown" role="tooltip">
+        A forced wait before the unblock buttons will work — it runs even after you've typed
+        your phrase correctly. Pure stalling, so the urge has time to pass.
+      </span>
       <select id="cooldownInput" class="setup-select">
         <option value="0">None</option>
         <option value="15">15 seconds</option>
@@ -53,6 +65,18 @@
 
     <div class="setup-row">
       <label for="tempUnlockInput">Temporary unlock lasts</label>
+      <button type="button" class="info" aria-describedby="tipTemp" aria-label="About temporary unlock">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10" />
+          <line x1="12" y1="16" x2="12" y2="12" />
+          <line x1="12" y1="8" x2="12.01" y2="8" />
+        </svg>
+      </button>
+      <span class="tip" id="tipTemp" role="tooltip">
+        How long “Open” lets you through before the site re-blocks itself. The entry stays on
+        your list the whole time — a lapse, not a deletion.
+      </span>
       <select id="tempUnlockInput" class="setup-select">
         <option value="1">1 minute</option>
         <option value="5">5 minutes</option>
