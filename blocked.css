@@ -1,11 +1,11 @@
-/* ─── Blocked Page · Claymorphism Dark ─── */
+/* ─── Blocked Page · Quiet Technology, dark ─── */
 /* Tokens and the reset live in theme.css, linked ahead of this file. */
 
 body {
   min-height: 100vh;
   background: var(--bg-base);
-  color: var(--text-primary);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  color: var(--ink);
+  font-family: var(--font);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -13,157 +13,148 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* ─── Ambient Glow (Subtle warm gray, no purple) ─── */
+/* ─── Ambient ─── */
+/* The one looping thing left in the app, and the one deliberate break from the
+   style. Twelve seconds is slow enough to read as breath rather than motion —
+   which is the job the style otherwise hands to its slow transitions. Delete
+   both nodes in blocked.html if it ever reads as decoration. */
 .ambient {
   position: fixed;
   top: 45%;
   left: 50%;
-  width: 650px;
-  height: 650px;
+  width: 720px;
+  height: 720px;
   transform: translate(-50%, -50%);
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.02) 0%, transparent 65%);
+  background: radial-gradient(circle, rgba(216, 212, 204, 0.022) 0%, transparent 68%);
   pointer-events: none;
-  animation: breathe 7s ease-in-out infinite;
+  animation: breathe 12s ease-in-out infinite;
 }
 
 .ambient-secondary {
   position: fixed;
   top: 55%;
-  left: 45%;
-  width: 400px;
-  height: 400px;
+  left: 46%;
+  width: 440px;
+  height: 440px;
   transform: translate(-50%, -50%);
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.015) 0%, transparent 60%);
+  background: radial-gradient(circle, rgba(216, 212, 204, 0.014) 0%, transparent 62%);
   pointer-events: none;
-  animation: breathe 9s ease-in-out 2s infinite;
+  animation: breathe 15s ease-in-out 3s infinite;
 }
 
 @keyframes breathe {
-  0%, 100% {
-    opacity: 0.5;
+  0%,
+  100% {
+    opacity: 0.45;
     transform: translate(-50%, -50%) scale(1);
   }
+
   50% {
     opacity: 1;
-    transform: translate(-50%, -50%) scale(1.15);
+    transform: translate(-50%, -50%) scale(1.12);
   }
 }
 
 /* ─── Content ─── */
+/* A narrow centred column with more empty space around it than seems
+   reasonable. That surplus is the whole point: the page has one thing to say. */
 .container {
   text-align: center;
-  max-width: 520px;
-  padding: 48px 40px;
+  max-width: 34rem;
+  padding: 64px 40px;
   position: relative;
   z-index: 1;
-  animation: fadeUp 0.7s ease-out;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: settle var(--fade-slow) ease-out;
 }
 
-@keyframes fadeUp {
+@keyframes settle {
   from {
     opacity: 0;
-    transform: translateY(24px);
   }
+
   to {
     opacity: 1;
-    transform: translateY(0);
   }
 }
 
-/* ─── Shield Icon ─── */
+/* ─── The mark ─── */
 .shield {
-  margin-bottom: 36px;
-  color: var(--text-primary);
-  animation: fadeUp 0.9s ease-out;
-}
-
-.shield svg {
-  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5));
+  color: var(--ink);
+  opacity: 0.5;
+  margin-bottom: 56px;
 }
 
 /* ─── Typography ─── */
+/* Barely larger than the body and never bold — the hierarchy is the space
+   above and below it, not the weight. */
 h1 {
-  font-size: 30px;
-  font-weight: 700;
-  letter-spacing: -0.035em;
-  line-height: 1.3;
-  margin-bottom: 18px;
-  color: var(--text-primary);
+  font-size: 26px;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1.45;
+  color: var(--ink);
+  text-wrap: balance;
 }
 
 .subtext {
-  font-size: 15px;
-  line-height: 1.7;
-  color: var(--text-secondary);
-  margin-bottom: 44px;
+  font-size: 18px;
+  line-height: 1.8;
+  color: var(--ink-2);
+  margin-top: 28px;
 }
 
 /* The entry's codename — deliberately the only identifier this page carries. */
 .alias {
-  display: inline-block;
-  margin-bottom: 6px;
-  font-size: 13px;
-  font-weight: 700;
+  display: block;
+  margin-bottom: 10px;
+  font-size: 14px;
+  font-style: italic;
   letter-spacing: 0.04em;
-  color: var(--text-primary);
-  background: var(--bg-clay);
-  border-radius: 99px;
-  padding: 5px 14px;
-  box-shadow: var(--clay-shadow-sm);
+  color: var(--ink-3);
 }
 
 .footnote {
-  margin-top: 32px;
-  font-size: 12px;
-  color: var(--text-muted);
+  margin-top: 56px;
+  font-size: 13px;
+  color: var(--ink-3);
 }
 
-/* ─── Buttons ─── */
+/* ─── Actions ─── */
+/* Bordered text, not filled buttons. Nothing on this page should look eager. */
 .actions {
   display: flex;
-  gap: 14px;
+  gap: 12px;
   justify-content: center;
+  margin-top: 64px;
 }
 
 .btn {
-  padding: 14px 34px;
+  padding: 12px 30px;
   border-radius: var(--radius);
-  font-size: 14px;
-  font-weight: 600;
+  font-size: 15px;
   font-family: inherit;
   cursor: pointer;
-  border: 1px solid var(--border);
-  transition: box-shadow 0.2s ease, background 0.15s ease, transform 0.15s ease;
-  -webkit-font-smoothing: antialiased;
+  background: transparent;
+  border: 1px solid var(--line);
+  color: var(--ink-2);
+  transition: background var(--fade), color var(--fade), border-color var(--fade);
 }
 
-.btn-secondary {
-  background: var(--bg-clay);
-  color: var(--text-secondary);
-  border: 1px solid rgba(255, 255, 255, 0.04);
-  box-shadow: var(--clay-shadow);
+.btn:hover {
+  background: var(--bg-surface);
+  border-color: var(--line-strong);
+  color: var(--ink);
 }
 
-.btn-secondary:hover {
-  background: var(--bg-clay-hover);
-  color: var(--text-primary);
-  box-shadow: var(--clay-shadow-hover);
+.btn:focus-visible {
+  outline: 1px solid var(--line-strong);
+  outline-offset: 2px;
 }
 
 .btn-primary {
-  background: var(--accent);
-  color: var(--bg-base);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: var(--clay-shadow);
-}
-
-.btn-primary:hover {
-  background: var(--accent-hover);
-  box-shadow: var(--clay-shadow-hover);
-  transform: translateY(-1px);
-}
-
-.btn:active {
-  box-shadow: var(--clay-shadow-pressed) !important;
-  transform: scale(0.97) !important;
+  border-color: var(--line-strong);
+  color: var(--ink);
 }
