@@ -1,5 +1,15 @@
-/* ─── Nopeek Shared Theme · Claymorphism Dark ─── */
-/* Single source of truth for tokens used by both popup.css and blocked.css. */
+/* ─── Nopeek Shared Theme · Quiet Technology, dark ─── */
+/* Single source of truth for tokens used by both popup.css and blocked.css.
+ *
+ * The rules this style follows, in short: space separates things, not shadow.
+ * Hierarchy comes from air and position, never from weight or colour. Nothing
+ * on screen exists to attract attention — no badge, no pulse, no accent hue.
+ * Transitions are slow and touch opacity, because time reads as calm.
+ *
+ * The published style is a warm near-white. We keep the dark ground instead:
+ * the block page opens unannounced, often late, and a white flash at 1am is
+ * exactly the jolt the rest of this is trying to avoid. Every other rule holds.
+ */
 
 *,
 *::before,
@@ -14,47 +24,53 @@
      the dark palette instead of defaulting to light. */
   color-scheme: dark;
 
-  /* ── Palette ── */
-  --bg-base: #111113;
-  --bg-clay: #1e1e22;
-  --bg-clay-hover: #252529;
-  --border: rgba(255, 255, 255, 0.04);
-  --text-primary: #e8e8ec;
-  --text-secondary: #7a7a84;
-  --text-muted: #4a4a52;
-  --accent: #e8e8ec;
-  --accent-hover: #ffffff;
-  --danger: #e05555;
-  --danger-hover: #f07070;
-  --success: #4ade80;
+  /* ── Palette ──
+     Warm greys with a stone tint. Surfaces sit within a couple of percent of
+     each other on purpose — you should have to look to see the difference. */
+  --bg-base: #131312;
+  --bg-surface: #191918;
+  --bg-surface-hi: #1e1d1b;
+  --line: #2c2a27;
+  --line-strong: #3b3833;
 
-  /* ── Clay Shadows ── */
-  --clay-shadow:
-    8px 8px 16px rgba(0, 0, 0, 0.45),
-    inset -4px -4px 8px rgba(0, 0, 0, 0.3),
-    inset 4px 4px 8px rgba(255, 255, 255, 0.04);
+  --ink: #d8d4cc;
+  /* 5.3:1 on the base ground — muted, still comfortably readable. */
+  --ink-2: #8d8880;
+  /* 3.4:1 — footnotes and placeholders only. Never body copy. */
+  --ink-3: #6f6a63;
 
-  --clay-shadow-hover:
-    4px 4px 10px rgba(0, 0, 0, 0.5),
-    inset -3px -3px 6px rgba(0, 0, 0, 0.35),
-    inset 3px 3px 6px rgba(255, 255, 255, 0.06);
+  /* Not accents. Two desaturated inks that let a destructive action and a
+     satisfied one differ by more than their label — the palette's only
+     concession, and both stay quieter than the primary ink. */
+  --caution: #b08074;
+  --caution-hi: #c4948a;
+  --affirm: #8a9c86;
 
-  --clay-shadow-pressed:
-    2px 2px 6px rgba(0, 0, 0, 0.5),
-    inset -2px -2px 4px rgba(0, 0, 0, 0.4),
-    inset 2px 2px 4px rgba(255, 255, 255, 0.03);
+  /* ── Type ──
+     A serif set large with generous leading. Emphasis, where it is needed at
+     all, comes from italic or from space — not from bold. */
+  --font: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
 
-  --clay-shadow-sm:
-    4px 4px 10px rgba(0, 0, 0, 0.35),
-    inset -2px -2px 5px rgba(0, 0, 0, 0.25),
-    inset 2px 2px 5px rgba(255, 255, 255, 0.035);
+  /* ── Geometry ──
+     Present, but barely. No shadows anywhere in this file by design. */
+  --radius: 3px;
 
-  --clay-shadow-sm-hover:
-    2px 2px 6px rgba(0, 0, 0, 0.4),
-    inset -2px -2px 4px rgba(0, 0, 0, 0.3),
-    inset 2px 2px 4px rgba(255, 255, 255, 0.05);
+  /* ── Motion ──
+     400–600ms, opacity where possible. Nothing loops, nothing enters on scroll. */
+  --fade: 480ms ease;
+  --fade-slow: 620ms ease;
+}
 
-  /* ── Geometry ── */
-  --radius: 16px;
-  --radius-lg: 24px;
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --fade: 1ms linear;
+    --fade-slow: 1ms linear;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition-duration: 1ms !important;
+  }
 }

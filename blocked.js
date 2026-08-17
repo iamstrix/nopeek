@@ -27,9 +27,9 @@ async function showTally() {
   const tally = document.getElementById('tally');
 
   tally.innerHTML = '';
+  // No <br>: .alias is a block, so the codename already sits on its own line.
   tally.append(
     buildAlias(meta.alias),
-    document.createElement('br'),
     document.createTextNode("Take a breath. You're doing fine.")
   );
 }

@@ -1,21 +1,30 @@
-/* ─── Nopeek Popup · Claymorphism Dark ─── */
+/* ─── Nopeek Popup · Quiet Technology, dark ─── */
 /* Tokens and the reset live in theme.css, linked ahead of this file. */
 
 body {
   width: 380px;
   background: var(--bg-base);
-  color: var(--text-primary);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
-  font-size: 13px;
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: 15px;
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
 }
 
+/* Focus is never removed, only restyled — a hairline the ink can reach. */
+:focus-visible {
+  outline: 1px solid var(--line-strong);
+  outline-offset: 2px;
+}
+
 /* ─── Layout ─── */
+/* The gaps are the design. Nothing here is separated by a rule that could be
+   separated by space instead. */
 .container {
   display: flex;
   flex-direction: column;
-  padding: 20px;
-  gap: 16px;
+  padding: 26px 24px 24px;
+  gap: 26px;
 }
 
 /* ─── Header ─── */
@@ -32,33 +41,21 @@ body {
 }
 
 .logo-icon {
-  width: 40px;
-  height: 40px;
-  background: var(--bg-clay);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  box-shadow: var(--clay-shadow-sm);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--text-primary);
+  color: var(--ink);
+  opacity: 0.85;
 }
 
 h1 {
-  font-size: 15px;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  color: var(--text-primary);
-}
-
-.subtitle {
-  font-size: 11px;
-  color: var(--text-secondary);
-  margin-top: 1px;
+  font-size: 17px;
   font-weight: 400;
+  letter-spacing: 0.01em;
+  color: var(--ink);
 }
 
-/* ─── Input Group ─── */
+/* ─── Input ─── */
 .input-group {
   display: flex;
   gap: 8px;
@@ -66,84 +63,73 @@ h1 {
 
 #urlInput {
   flex: 1;
-  background: var(--bg-clay);
-  border: 1px solid var(--border);
+  min-width: 0;
+  background: transparent;
+  border: 1px solid var(--line);
   border-radius: var(--radius);
-  padding: 12px 16px;
-  color: var(--text-primary);
-  font-size: 13px;
+  padding: 11px 13px;
+  color: var(--ink);
+  font-size: 14px;
   font-family: inherit;
   outline: none;
-  box-shadow: var(--clay-shadow);
-  transition: box-shadow 0.25s ease, background 0.2s ease;
+  transition: border-color var(--fade), background var(--fade);
 }
 
 #urlInput::placeholder {
-  color: var(--text-muted);
+  color: var(--ink-3);
 }
 
 #urlInput:focus {
-  box-shadow: var(--clay-shadow-hover);
-  background: var(--bg-clay-hover);
+  border-color: var(--line-strong);
+  background: var(--bg-surface);
 }
 
 .btn-add {
-  width: 44px;
+  width: 42px;
   flex-shrink: 0;
-  background: var(--accent);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: transparent;
+  border: 1px solid var(--line);
   border-radius: var(--radius);
-  color: var(--bg-base);
+  color: var(--ink-2);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: var(--clay-shadow);
-  transition: box-shadow 0.2s ease, transform 0.15s ease, background 0.15s ease;
+  transition: color var(--fade), background var(--fade), border-color var(--fade);
 }
 
 .btn-add:hover {
-  background: var(--accent-hover);
-  box-shadow: var(--clay-shadow-hover);
-}
-
-.btn-add:active {
-  box-shadow: var(--clay-shadow-pressed);
-  transform: scale(0.95);
+  background: var(--bg-surface);
+  border-color: var(--line-strong);
+  color: var(--ink);
 }
 
 /* ─── Feedback ─── */
+/* Stated in words; the ink only reinforces what the sentence already says. */
 .feedback {
-  padding: 9px 14px;
-  border-radius: 12px;
-  font-size: 12px;
-  font-weight: 500;
-  text-align: center;
-  animation: feedbackIn 0.25s ease-out;
+  padding: 2px 0;
+  font-size: 13px;
+  font-style: italic;
+  color: var(--ink-2);
+  animation: fade var(--fade) ease-out;
 }
 
-@keyframes feedbackIn {
+@keyframes fade {
   from {
     opacity: 0;
-    transform: translateY(-4px);
   }
 
   to {
     opacity: 1;
-    transform: translateY(0);
   }
 }
 
 .feedback.success {
-  background: var(--bg-clay);
-  color: var(--success);
-  box-shadow: var(--clay-shadow-sm);
+  color: var(--affirm);
 }
 
 .feedback.error {
-  background: var(--bg-clay);
-  color: var(--danger);
-  box-shadow: var(--clay-shadow-sm);
+  color: var(--caution);
 }
 
 .feedback.hidden {
@@ -153,44 +139,38 @@ h1 {
 /* ─── List Header ─── */
 .list-header {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   justify-content: space-between;
-  padding-top: 2px;
 }
 
 .list-title {
-  font-size: 11px;
-  font-weight: 600;
+  font-size: 10.5px;
+  font-weight: 400;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--text-secondary);
+  letter-spacing: 0.4em;
+  color: var(--ink-3);
 }
 
+/* A plain number. It counts what you asked for, so it stays — but it is not a
+   badge: no fill, no pill, nothing that reads as a score. */
 .count {
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--text-primary);
-  background: var(--bg-clay);
-  box-shadow: var(--clay-shadow-sm);
-  padding: 3px 10px;
-  border-radius: 99px;
-  min-width: 20px;
-  text-align: center;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
 }
 
-/* ─── URL List ─── */
+/* ─── List ─── */
 .url-list {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  max-height: 290px;
+  max-height: 320px;
   overflow-y: auto;
-  padding-right: 2px;
+  margin-top: -12px;
 }
 
-/* Scrollbar */
 .url-list::-webkit-scrollbar {
-  width: 5px;
+  width: 4px;
 }
 
 .url-list::-webkit-scrollbar-track {
@@ -198,174 +178,104 @@ h1 {
 }
 
 .url-list::-webkit-scrollbar-thumb {
-  background: var(--bg-clay);
-  border-radius: 99px;
+  background: var(--line);
+  border-radius: var(--radius);
 }
 
 .url-list::-webkit-scrollbar-thumb:hover {
-  background: var(--bg-clay-hover);
+  background: var(--line-strong);
 }
 
-/* ─── URL Item ─── */
+/* ─── List item ─── */
+/* No card, no fill. A hairline between entries, which is the one place space
+   genuinely cannot do the separating. */
 .url-item {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: 10px;
-  padding: 12px 14px;
-  background: var(--bg-clay);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  box-shadow: var(--clay-shadow-sm);
-  transition: box-shadow 0.2s ease, background 0.2s ease;
-  animation: slideIn 0.22s ease-out backwards;
+  padding: 15px 2px;
+  border-bottom: 1px solid var(--line);
+  transition: opacity var(--fade);
+  animation: fade var(--fade-slow) ease-out backwards;
 }
 
-/* Stagger animation for list items */
-.url-item:nth-child(1) {
-  animation-delay: 0s;
-}
-
-.url-item:nth-child(2) {
-  animation-delay: 0.03s;
-}
-
-.url-item:nth-child(3) {
-  animation-delay: 0.06s;
-}
-
-.url-item:nth-child(4) {
-  animation-delay: 0.09s;
-}
-
-.url-item:nth-child(5) {
-  animation-delay: 0.12s;
-}
-
-.url-item:nth-child(6) {
-  animation-delay: 0.15s;
-}
-
-.url-item:nth-child(7) {
-  animation-delay: 0.18s;
-}
-
-.url-item:nth-child(8) {
-  animation-delay: 0.21s;
-}
-
-.url-item:nth-child(9) {
-  animation-delay: 0.24s;
-}
-
-.url-item:nth-child(10) {
-  animation-delay: 0.27s;
-}
-
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateY(-6px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.url-item:hover {
-  background: var(--bg-clay-hover);
-  box-shadow: var(--clay-shadow-sm-hover);
+.url-item:last-child {
+  border-bottom: none;
 }
 
 .url-info {
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 2px;
   min-width: 0;
   flex: 1;
 }
 
 /* Codename, never the URL — the list must not become the cue it protects you from. */
 .url-alias {
-  font-size: 12px;
-  font-weight: 600;
+  font-size: 15px;
   letter-spacing: 0.01em;
-  color: var(--text-primary);
+  color: var(--ink);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .url-meta {
-  font-size: 10px;
-  color: var(--text-muted);
+  font-size: 12px;
+  color: var(--ink-3);
 }
 
+/* Italic, because italic is the only emphasis this style allows. */
 .unlock-pill {
   flex-shrink: 0;
-  font-size: 9px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--success);
-  background: rgba(74, 222, 128, 0.1);
-  border-radius: 99px;
-  padding: 3px 8px;
+  font-size: 12px;
+  font-style: italic;
+  color: var(--ink-2);
 }
 
 .btn-remove {
   background: none;
   border: none;
-  color: var(--text-muted);
+  color: var(--ink-3);
   cursor: pointer;
   padding: 6px;
-  border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  transition: color 0.15s ease, background 0.15s ease, box-shadow 0.2s ease;
+  transition: color var(--fade);
 }
 
 .btn-remove:hover {
-  color: var(--danger);
-  background: rgba(224, 85, 85, 0.08);
-  box-shadow:
-    inset -2px -2px 4px rgba(0, 0, 0, 0.2),
-    inset 2px 2px 4px rgba(255, 255, 255, 0.02);
+  color: var(--caution);
 }
 
-.btn-remove:active {
-  transform: scale(0.9);
-}
-
-/* ─── Empty State ─── */
+/* ─── Empty state ─── */
 .empty-state {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 36px 0 24px;
-  gap: 6px;
+  padding: 52px 0 44px;
+  gap: 8px;
+  text-align: center;
 }
 
 .empty-icon {
-  margin-bottom: 8px;
-  color: var(--text-muted);
+  margin-bottom: 14px;
+  color: var(--ink-3);
 }
 
 .empty-state p {
-  color: var(--text-secondary);
-  font-size: 13px;
-  font-weight: 500;
+  color: var(--ink-2);
+  font-size: 15px;
 }
 
 .empty-state .empty-sub {
-  color: var(--text-muted);
-  font-size: 11px;
-  font-weight: 400;
+  color: var(--ink-3);
+  font-size: 13px;
+  font-style: italic;
 }
 
 /* ─── Utility ─── */
@@ -376,52 +286,46 @@ h1 {
 .btn-icon {
   background: none;
   border: none;
-  color: var(--text-muted);
+  color: var(--ink-3);
   cursor: pointer;
-  padding: 7px;
-  border-radius: 10px;
+  padding: 6px;
   display: flex;
   align-items: center;
-  transition: color 0.15s ease, background 0.15s ease;
+  transition: color var(--fade);
 }
 
 .btn-icon:hover {
-  color: var(--text-primary);
-  background: var(--bg-clay);
-}
-
-.btn-icon:active {
-  transform: scale(0.9);
+  color: var(--ink);
 }
 
 .btn-text {
   background: none;
   border: none;
-  color: var(--text-muted);
+  color: var(--ink-3);
   font-family: inherit;
-  font-size: 11.5px;
+  font-size: 13px;
   padding: 6px;
   cursor: pointer;
-  transition: color 0.15s ease;
+  transition: color var(--fade);
 }
 
 .btn-text:hover {
-  color: var(--text-secondary);
+  color: var(--ink-2);
 }
 
-/* ─── First-run Setup ─── */
+/* ─── First-run setup ─── */
 .setup-view {
   display: flex;
   flex-direction: column;
-  padding: 24px 20px 20px;
-  gap: 12px;
+  padding: 28px 24px 24px;
+  gap: 18px;
 }
 
 .setup-lead {
-  font-size: 12.5px;
-  line-height: 1.6;
-  color: var(--text-secondary);
-  margin-top: 4px;
+  font-size: 15px;
+  line-height: 1.75;
+  color: var(--ink-2);
+  margin-top: 2px;
 }
 
 .setup-input {
@@ -431,42 +335,47 @@ h1 {
 .setup-confirm {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
 }
 
 .setup-hint {
-  font-size: 10px;
-  color: var(--text-muted);
-  margin-top: -6px;
+  font-size: 12px;
+  font-style: italic;
+  color: var(--ink-3);
+  margin-top: -12px;
 }
 
 .setup-row {
   position: relative;
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 6px;
 }
 
 .setup-row label {
-  font-size: 11.5px;
-  color: var(--text-secondary);
+  font-size: 14px;
+  color: var(--ink-2);
 }
 
 .setup-select {
   margin-left: auto;
-  background: var(--bg-clay);
-  color: var(--text-primary);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  box-shadow: var(--clay-shadow-sm);
+  background: transparent;
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
   font-family: inherit;
-  font-size: 11.5px;
-  padding: 7px 9px;
+  font-size: 13px;
+  padding: 7px 8px;
   cursor: pointer;
   outline: none;
+  transition: border-color var(--fade);
 }
 
-/* ─── Info Tooltips ─── */
+.setup-select:hover {
+  border-color: var(--line-strong);
+}
+
+/* ─── Info tooltips ─── */
 .info {
   display: inline-flex;
   align-items: center;
@@ -477,15 +386,14 @@ h1 {
   background: none;
   border: none;
   border-radius: 50%;
-  color: var(--text-muted);
+  color: var(--ink-3);
   cursor: help;
-  transition: color 0.15s ease;
+  transition: color var(--fade);
 }
 
 .info:hover,
 .info:focus-visible {
-  color: var(--text-primary);
-  outline: none;
+  color: var(--ink);
 }
 
 /* Spans the full row width so a long tip can never overflow the 380px popup. */
@@ -495,54 +403,43 @@ h1 {
   right: 0;
   bottom: calc(100% + 8px);
   z-index: 5;
-  padding: 10px 12px;
-  font-size: 10.5px;
-  line-height: 1.55;
-  color: var(--text-secondary);
-  background: var(--bg-clay);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  box-shadow: var(--clay-shadow-sm);
+  padding: 12px 14px;
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--ink-2);
+  background: var(--bg-surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
   /* Hidden with opacity rather than `visibility`/`display` so it stays in the
      accessibility tree — aria-describedby can't reach a hidden element. */
   opacity: 0;
-  transform: translateY(3px);
-  transition: opacity 0.15s ease, transform 0.15s ease;
+  transition: opacity var(--fade);
   pointer-events: none;
 }
 
 .info:hover ~ .tip,
 .info:focus-visible ~ .tip {
   opacity: 1;
-  transform: translateY(0);
 }
 
 .btn-wide {
-  margin-top: 6px;
-  padding: 12px;
-  background: var(--accent);
-  color: var(--bg-base);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  margin-top: 8px;
+  padding: 13px;
+  background: transparent;
+  color: var(--ink);
+  border: 1px solid var(--line-strong);
   border-radius: var(--radius);
-  box-shadow: var(--clay-shadow-sm);
   font-family: inherit;
-  font-size: 13px;
-  font-weight: 700;
+  font-size: 15px;
   cursor: pointer;
-  transition: background 0.15s ease, box-shadow 0.2s ease, transform 0.15s ease;
+  transition: background var(--fade), color var(--fade);
 }
 
 .btn-wide:hover {
-  background: var(--accent-hover);
-  box-shadow: var(--clay-shadow-sm-hover);
+  background: var(--bg-surface-hi);
 }
 
-.btn-wide:active {
-  box-shadow: var(--clay-shadow-pressed);
-  transform: scale(0.97);
-}
-
-/* ─── The Gate ─── */
+/* ─── The gate ─── */
 .gate-overlay {
   position: fixed;
   inset: 0;
@@ -550,183 +447,162 @@ h1 {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 16px;
-  background: rgba(10, 10, 12, 0.72);
-  backdrop-filter: blur(6px);
-  animation: gateIn 0.18s ease-out;
-}
-
-@keyframes gateIn {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
+  padding: 18px;
+  background: rgba(19, 19, 18, 0.92);
+  animation: fade var(--fade) ease-out;
 }
 
 .gate-card {
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  padding: 20px 18px;
-  background: var(--bg-clay);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--clay-shadow);
+  gap: 12px;
+  padding: 24px 20px;
+  background: var(--bg-base);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
 }
 
 .gate-alias {
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--text-primary);
+  font-size: 17px;
+  color: var(--ink);
 }
 
 .gate-lead {
-  font-size: 11.5px;
-  color: var(--text-secondary);
-  margin-top: -6px;
+  font-size: 14px;
+  font-style: italic;
+  color: var(--ink-2);
+  margin-top: -8px;
 }
 
 .gate-label {
   font-size: 10px;
-  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--text-muted);
-  margin-top: 4px;
+  letter-spacing: 0.4em;
+  color: var(--ink-3);
+  margin-top: 6px;
 }
 
 /* Unselectable on purpose: copying the phrase would skip the entire point. */
 .gate-phrase {
   user-select: none;
   -webkit-user-select: none;
-  font-size: 13px;
-  font-weight: 600;
-  line-height: 1.5;
-  color: var(--text-primary);
-  background: var(--bg-base);
-  border-radius: 12px;
-  padding: 12px 14px;
-  box-shadow:
-    inset -2px -2px 5px rgba(0, 0, 0, 0.35),
-    inset 2px 2px 5px rgba(255, 255, 255, 0.02);
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--ink);
+  background: var(--bg-surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 13px 14px;
 }
 
 .gate-input {
   width: 100%;
   resize: none;
-  background: var(--bg-clay);
-  color: var(--text-primary);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  box-shadow: var(--clay-shadow-sm);
+  background: transparent;
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
   font-family: inherit;
-  font-size: 13px;
-  line-height: 1.5;
-  padding: 11px 13px;
+  font-size: 15px;
+  line-height: 1.6;
+  padding: 12px 13px;
   outline: none;
-  transition: box-shadow 0.2s ease;
+  transition: border-color var(--fade);
 }
 
 .gate-input::placeholder {
-  color: var(--text-muted);
+  color: var(--ink-3);
 }
 
 .gate-input:focus {
-  box-shadow: var(--clay-shadow-sm-hover);
+  border-color: var(--line-strong);
 }
 
+/* The cooldown, drawn as a hairline that fills. It is the one moving thing in
+   the popup, and it moves because you are being asked to wait. */
 .gate-progress {
-  height: 4px;
-  border-radius: 99px;
-  background: var(--bg-base);
-  overflow: hidden;
+  height: 1px;
+  background: var(--line);
 }
 
 .gate-progress-bar {
   height: 100%;
   width: 0;
-  border-radius: 99px;
-  background: var(--success);
-  transition: width 0.12s linear, background 0.15s ease;
+  background: var(--ink-3);
+  transition: width 0.12s linear, background var(--fade);
 }
 
 .gate-progress-bar.wrong {
-  background: var(--danger);
+  background: var(--caution);
 }
 
 .gate-status {
-  font-size: 10.5px;
-  min-height: 14px;
-  color: var(--text-muted);
+  font-size: 12.5px;
+  font-style: italic;
+  min-height: 18px;
+  color: var(--ink-3);
 }
 
 .gate-status.waiting {
-  color: var(--text-secondary);
+  color: var(--ink-2);
 }
 
 .gate-status.ready {
-  color: var(--success);
+  color: var(--affirm);
 }
 
 .gate-status.wrong {
-  color: var(--danger);
+  color: var(--caution);
 }
 
 .gate-actions {
   display: flex;
   gap: 8px;
-  margin-top: 4px;
+  margin-top: 6px;
 }
 
 .btn-gate {
   flex: 1;
-  padding: 10px 6px;
-  border-radius: 12px;
-  border: 1px solid var(--border);
-  background: var(--bg-clay);
-  box-shadow: var(--clay-shadow-sm);
-  color: var(--text-secondary);
+  padding: 11px 6px;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--ink-2);
   font-family: inherit;
-  font-size: 11.5px;
-  font-weight: 600;
+  font-size: 13.5px;
   cursor: pointer;
-  transition: color 0.15s ease, background 0.15s ease, box-shadow 0.2s ease, opacity 0.15s ease;
+  transition: color var(--fade), background var(--fade), border-color var(--fade), opacity var(--fade);
 }
 
 .btn-gate:hover:not(:disabled) {
-  background: var(--bg-clay-hover);
-  box-shadow: var(--clay-shadow-sm-hover);
-}
-
-.btn-gate:active:not(:disabled) {
-  box-shadow: var(--clay-shadow-pressed);
-  transform: scale(0.96);
+  background: var(--bg-surface-hi);
+  border-color: var(--line-strong);
 }
 
 .btn-gate:disabled {
-  opacity: 0.4;
+  opacity: 0.35;
   cursor: not-allowed;
 }
 
 /* Backing out is always available, so it doesn't need to compete for space. */
 .btn-cancel {
   flex: 0 0 auto;
-  padding: 10px 12px;
-  color: var(--text-muted);
+  padding: 11px 13px;
+  border-color: transparent;
+  color: var(--ink-3);
 }
 
 .btn-temp:not(:disabled) {
-  color: var(--text-primary);
+  color: var(--ink);
 }
 
+/* Permanent, so it is the one control allowed to differ by more than its label. */
 .btn-danger:not(:disabled) {
-  color: var(--danger);
+  color: var(--caution);
 }
 
 .btn-danger:not(:disabled):hover {
-  color: var(--danger-hover);
+  color: var(--caution-hi);
+  border-color: var(--caution);
 }
