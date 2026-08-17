@@ -4,6 +4,8 @@
 
 import { loadGate, saveGate, openGate } from './gate.js';
 
+const welcomeView = document.getElementById('welcomeView');
+const welcomeBtn = document.getElementById('welcomeBtn');
 const setupView = document.getElementById('setupView');
 const setupLead = document.getElementById('setupLead');
 const setupConfirm = document.getElementById('setupConfirm');
@@ -27,6 +29,10 @@ const feedback = document.getElementById('feedback');
 let feedbackTimer = null;
 let gate = null;
 
+// TEMPORARY, for working on the welcome screen: show it on every open instead
+// of only before setup. Flip to false to get the first-run-only behaviour back.
+const ALWAYS_WELCOME = true;
+
 // ─── Init ───
 init();
 
@@ -34,6 +40,8 @@ addBtn.addEventListener('click', addUrl);
 urlInput.addEventListener('keydown', (e) => {
   if (e.key === 'Enter') addUrl();
 });
+// Straight through to the list if there's already a phrase, otherwise on to setup.
+welcomeBtn.addEventListener('click', () => (gate.configured ? showMain() : showSetup()));
 saveGateBtn.addEventListener('click', submitGate);
 editPhraseBtn.addEventListener('click', showSetup);
 setupCancelBtn.addEventListener('click', showMain);
@@ -45,8 +53,19 @@ for (const evt of ['paste', 'drop', 'contextmenu']) {
 
 async function init() {
   gate = await loadGate();
-  if (gate.configured) showMain();
-  else showSetup();
+  if (gate.configured && !ALWAYS_WELCOME) showMain();
+  else showWelcome();
+}
+
+// ─── Welcome ───
+// No stored "seen" flag: it stands in front of setup, so it goes away the
+// moment there's a phrase to get back in with, and not before.
+function showWelcome() {
+  welcomeBtn.textContent = gate.configured ? 'Go on in' : 'Set it up';
+  mainView.classList.add('hidden');
+  setupView.classList.add('hidden');
+  welcomeView.classList.remove('hidden');
+  welcomeBtn.focus();
 }
 
 // ─── Setup, first-run and edit ───
@@ -69,12 +88,14 @@ function showSetup() {
     tempUnlockInput.value = String(gate.tempUnlockMinutes);
   }
 
+  welcomeView.classList.add('hidden');
   mainView.classList.add('hidden');
   setupView.classList.remove('hidden');
   (editing ? confirmInput : phraseInput).focus();
 }
 
 function showMain() {
+  welcomeView.classList.add('hidden');
   setupView.classList.add('hidden');
   mainView.classList.remove('hidden');
   loadUrls();
